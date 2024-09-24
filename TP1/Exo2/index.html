@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tp 1 - Exo 2</title>
+</head>
+<body>
+    <h1>Test d'Orientation et Mouvement du Smartphone</h1>
+
+    <h2>Orientation du smartphone (DeviceOrientation)</h2>
+    <div>
+        <p>Alpha : <span id="alpha">0</span>°</p>
+        <p>Beta : <span id="beta">0</span>°</p>
+        <p>Gamma : <span id="gamma">0</span>°</p>
+    </div>
+
+    <h2>Mouvement du smartphone (DeviceMotion)</h2>
+    <div>
+        <h3>Accélération sans gravité</h3>
+        <p>Accélération X: <span id="accelerationX">0</span> m/s²</p>
+        <p>Accélération Y: <span id="accelerationY">0</span> m/s²</p>
+        <p>Accélération Z: <span id="accelerationZ">0</span> m/s²</p>
+
+        <h3>Rotation (taux de rotation)</h3>
+        <p>Rotation Alpha: <span id="rotationAlpha">0</span> rad/s</p>
+        <p>Rotation Beta: <span id="rotationBeta">0</span> rad/s</p>
+        <p>Rotation Gamma: <span id="rotationGamma">0</span> rad/s</p>
+    </div>
+
+    <script>
+
+        window.addEventListener('deviceorientation', function(event) {
+            document.getElementById('alpha').textContent = event.alpha.toFixed(2)
+            document.getElementById('beta').textContent = event.beta.toFixed(2)
+            document.getElementById('gamma').textContent = event.gamma.toFixed(2)
+        });
+
+        window.addEventListener('devicemotion', function(event) {
+            var acceleration = event.acceleration
+            var rotationRate = event.rotationRate
+
+            if (acceleration) {
+                document.getElementById('accelerationX').textContent = acceleration.x ? acceleration.x.toFixed(2) : '0'
+                document.getElementById('accelerationY').textContent = acceleration.y ? acceleration.y.toFixed(2) : '0'
+                document.getElementById('accelerationZ').textContent = acceleration.z ? acceleration.z.toFixed(2) : '0'
+            }
+
+            if (rotationRate) {
+                document.getElementById('rotationAlpha').textContent = rotationRate.alpha ? rotationRate.alpha.toFixed(2) : '0'
+                document.getElementById('rotationBeta').textContent = rotationRate.beta ? rotationRate.beta.toFixed(2) : '0'
+                document.getElementById('rotationGamma').textContent = rotationRate.gamma ? rotationRate.gamma.toFixed(2) : '0'
+            }
+        });
+    </script>
+</body>
+</html>

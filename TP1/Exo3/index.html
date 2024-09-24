@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP 1 - Exo 3</title>
+</head>
+<body>
+    <h1>Test des Événements Tactiles</h1>
+
+    <p><strong>Position touchée : </strong>X: <span id="touchX">0</span>, Y: <span id="touchY">0</span></p>
+    <p><strong>Type d'événement : </strong><span id="eventType">None</span></p>
+
+    <canvas id="canvas" width="400" height="400" style="border:solid black 1px;"></canvas>
+
+    <script>
+
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+        const touchX = document.getElementById('touchX')
+        const touchY = document.getElementById('touchY')
+        const eventType = document.getElementById('eventType')
+
+        let isDrawing = false
+
+        function getTouchPos(canvas, touchEvent) {
+            const rect = canvas.getBoundingClientRect()
+            const touch = touchEvent.touches[0]
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            }
+        }
+
+        canvas.addEventListener('touchstart', function(e) {
+            const pos = getTouchPos(canvas, e)
+            touchX.textContent = pos.x.toFixed(2)
+            touchY.textContent = pos.y.toFixed(2)
+            eventType.textContent = 'touchstart'
+
+            isDrawing = true
+
+            ctx.beginPath()
+            ctx.moveTo(pos.x, pos.y)
+        });
+
+        canvas.addEventListener('touchmove', function(e) {
+            if (!isDrawing) return
+
+            const pos = getTouchPos(canvas, e)
+            touchX.textContent = pos.x.toFixed(2)
+            touchY.textContent = pos.y.toFixed(2)
+            eventType.textContent = 'touchmove'
+
+
+            ctx.lineTo(pos.x, pos.y)
+            ctx.stroke()
+        });
+
+        canvas.addEventListener('touchend', function(e) {
+            eventType.textContent = 'touchend'
+            isDrawing = false
+        });
+
+        canvas.addEventListener('touchcancel', function(e) {
+            eventType.textContent = 'touchcancel'
+            isDrawing = false
+        });
+
+    </script>
+</body>
+</html>

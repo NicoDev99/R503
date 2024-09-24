@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP 1 - Exo 1</title>
+</head>
+<body>
+    <h1>Test de Géolocalisation</h1>
+
+    <h2>getCurrentPosition()</h2>
+    <div>
+        <p>Latitude: <span id="currentLat"></span></p>
+        <p>Longitude: <span id="currentLon"></span></p>
+        <p>Altitude: <span id="currentAlt"></span></p>
+        <p>Précision: <span id="currentAccuracy"></span></p>
+        <p>Vitesse: <span id="currentSpeed"></span></p>
+        <p>Date: <span id="currentDate"></span></p>
+    </div>
+
+    <h2>watchPosition()</h2>
+    <div>
+        <p>Latitude: <span id="watchLat"></span></p>
+        <p>Longitude: <span id="watchLon"></span></p>
+        <p>Altitude: <span id="watchAlt"></span></p>
+        <p>Précision: <span id="watchAccuracy"></span></p>
+        <p>Vitesse: <span id="watchSpeed"></span></p>
+        <p>Date: <span id="watchDate"></span></p>
+    </div>
+
+    <button id="startWatch">Start Watch</button>
+    <button id="stopWatch">Stop Watch</button>
+
+    <script>
+
+        let idWatch = null
+
+        function displayPosition(position, prefix) {
+            document.getElementById(prefix + 'Lat').textContent = position.coords.latitude.toFixed(6)
+            document.getElementById(prefix + 'Lon').textContent = position.coords.longitude.toFixed(6)
+            document.getElementById(prefix + 'Alt').textContent = position.coords.altitude !== null ? position.coords.altitude.toFixed(2) + " m" : "N/A"
+            document.getElementById(prefix + 'Accuracy').textContent = position.coords.accuracy + " m"
+            document.getElementById(prefix + 'Speed').textContent = position.coords.speed !== null ? (position.coords.speed * 3.6).toFixed(2) + " km/h" : "N/A"
+
+            const date = new Date(position.timestamp)
+            document.getElementById(prefix + 'Date').textContent = date.toLocaleString()
+        }
+
+        if(navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                displayPosition(position, 'current')
+            }, function(error) {
+                console.error("Erreur lors de la récupération de la position : ", error)
+            })
+
+            document.getElementById("startWatch").addEventListener("click", () => {
+                idWatch = navigator.geolocation.watchPosition(function(position) {
+                    displayPosition(position, 'watch')
+                }, function(error) {
+                    console.error("Erreur lors de la surveillance de la position : ", error)
+                })
+            })
+
+            document.getElementById("stopWatch").addEventListener("click", () => {
+                navigator.geolocation.clearWatch(idWatch)
+            })
+
+        } else {
+            alert("La géolocalisation n'est pas supportée par ce navigateur.")
+        }
+    </script>
+</body>
+</html>
